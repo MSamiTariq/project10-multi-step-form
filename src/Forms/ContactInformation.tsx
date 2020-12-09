@@ -1,8 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Grid, TextField, Button } from "@material-ui/core";
 import * as Yup from "yup";
 import TextError from "./TextError";
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 interface Props {
   submit: React.Dispatch<React.SetStateAction<number>>;
@@ -16,6 +18,9 @@ interface accountInfo {
   password: string;
   confirmPassword: string;
 }
+
+
+
 
 const validationSchema = Yup.object({
   emailID: Yup.string().required("Required").email("Invalid Email"),
@@ -34,6 +39,10 @@ const AccountInformation: FC<Props> = ({
   setFormValues,
   prevValues,
 }) => {
+
+const [showPassword, setShowPassword] = React.useState<boolean>(false);
+
+
   return (
     <Formik
       initialValues={prevValues}
@@ -45,7 +54,7 @@ const AccountInformation: FC<Props> = ({
     >
       {(formik) => {
         return (
-          <Form className="form_Content">
+          <Form className="form_Content" autoComplete = 'off'>
             <h1>Account Information</h1>
             <Grid container spacing={3} justify="center">
               <Grid item sm={8} xs={10}>
@@ -80,11 +89,15 @@ const AccountInformation: FC<Props> = ({
                   as={TextField}
                   label="Password"
                   variant="outlined"
+                  type = {showPassword? "text" : "password"}
                   helperText={
                     <ErrorMessage name="password" component={TextError} />
                   }
                   fullWidth
                 />
+                <button onClick={(e) =>{
+                  e.preventDefault();
+                  setShowPassword(!showPassword)}}>{showPassword ? <VisibilityOff /> : <Visibility />}</button>
               </Grid>
 
               <Grid item sm={8} xs={10}>
@@ -93,6 +106,7 @@ const AccountInformation: FC<Props> = ({
                   as={TextField}
                   label="Confirm Password"
                   variant="outlined"
+                  type = {showPassword? "text" : "password"}
                   helperText={
                     <ErrorMessage
                       name="confirmPassword"
@@ -103,7 +117,7 @@ const AccountInformation: FC<Props> = ({
                 />
               </Grid>
             </Grid>
-            <div className="buttons">
+            <div className= 'buttons'>
               <Button
                 variant="contained"
                 color="primary"
